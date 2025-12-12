@@ -1,20 +1,36 @@
 @startuml
 !pragma teoz true
 
-actor "User/Consumer" as user #PaleGreen
+participant "Application\nProvider" as app 
 
-participant "Artefact Manager" as am #Yellow
-participant "Artefact Registry #1" as ar1 #Yellow
-participant "Artefact Registry #2" as ar2 #Yellow
+box "Originating SOP" #LightBlue
+participant "Open Exposure\nGateway" as capex1 #yellow
+participant "Federation\nManager" as fedman1 #Yellow
+end box
 
-user -> am: Copy Artefact\n(artifact name, source, destination)
-note over am #Gold: Artefact Management API
+box "Partner SOP" #STRATEGY
+participant "Federation\nManager" as fedman2 #Yellow
+participant "Edge Cloud\nTF" as tf #yellow
+end box
+participant "Edge Cloud\nPlatform" as ecp #STRATEGY
 
-am -> ar1: Download Artefact
-ar1 --> am: Artefact Data
+note right app #Gold: CAMARA Edge Application\nManagement API
+app -> capex1: Application Onboarding Request\n(Partner SOP Zone)
 
-am -> ar2: Upload Artefact
-ar2 --> am: Upload Confirmation
+capex1 <-> fedman1: Check Federation Agreements
+note right capex1 #DarkTurquoise: GSMA Artefact Management API
+capex1 -> fedman1: Artefact Registration Request\n(Partner SOP Zone)
+fedman1 -> fedman2: Artefact Registration Request
+fedman2 -> tf: Artefact Registration Request
+tf -> ecp: Artefact Registration Request
+ecp <-> ecp: Register Artefact 
 
-am --> user: Copy Artefact Response\n(Success/Failure)
+note right capex1 #DarkTurquoise: GSMA Application Onboarding\nManagement API
+capex1 -> fedman1: Application Onboarding Request\n(Partner SOP Zone)
+
+fedman1 -> fedman2: Application Onboarding Request 
+fedman2 -> tf: Application Onboarding Request
+tf -> ecp: Application Onboarding Request
+ecp <-> ecp: Onboard Application
+
 @enduml
