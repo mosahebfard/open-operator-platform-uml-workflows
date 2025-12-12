@@ -1,0 +1,31 @@
+@startuml
+!pragma teoz true
+
+participant "Application\nProvider" as app 
+
+box "Originating SOP" #LightBlue
+participant "Open Exposure\nGateway" as capex1 #Yellow
+participant "Federation\nManager" as fedman1 #Yellow
+
+end box
+box "Partner SOP" #STRATEGY
+participant "Federation\nManager" as fedman2 #Yellow
+participant "Edge Cloud\nTF" as tf #yellow
+end box
+
+participant "Edge Cloud\nPlatform" as eca2 #STRATEGY
+
+note right app #Gold: CAMARA Edge Application Management AP
+app -> capex1: Application Instance Status Request\n(Application Instance Identifier)
+
+note right capex1 #DarkTurquoise: GSMA Application Deployment\nManagement API
+capex1 -> fedman1: Application Instance Status Request\n(Application Instance Identifier)
+fedman1 -> fedman2 : Application Instance Status Request\n(Application Instance Identifier)
+fedman2 -> tf: Application Instance Status Request\n(Application Instance Identifier)
+tf <-> eca2: Retrieve Application\nInstance Status (IP, FQDN)
+tf --> fedman2: Application Instance\nStatus Response (IP, FQDN)
+fedman2 --> fedman1 : Application Instance\nStatus Response (IP, FQDN)
+fedman1 --> capex1: Application Instance\nStatus Response (IP, FQDN)
+capex1 --> app: Application Instance\nStatus Response (IP, FQDN)
+
+@endum
