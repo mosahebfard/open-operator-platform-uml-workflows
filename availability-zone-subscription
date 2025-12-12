@@ -1,0 +1,17 @@
+@startuml
+!pragma teoz true
+
+
+box "Originating SOP" #LightBlue
+participant "Federation\nManager" as fedman1 #Yellow
+end box
+
+box "Partner SOP" #STRATEGY
+participant "Federation\nManager" as fedman2 #Yellow
+end box
+
+fedman1 -> fedman2: Zone Subscription Request\n(accepted zones)
+fedman2 -> fedman2: Register Subscription
+fedman2 --> fedman1: Zone Subscription Response\n(accepted zones information)
+
+@enduml
