@@ -1,36 +1,51 @@
 @startuml
 !pragma teoz true
 
+'skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+
+skinparam sequence {
+    'ParticipantFontSize 20
+    'ParticipantFontStyle bold
+    'MessageFontSize 12
+    MessageFontStyle bold
+    ArrowThickness 2
+    LifeLineBorderThickness 2
+}
+
 participant "Application\nProvider" as app
 
-box "Originating SOP" #LightBlue
-participant "Open Exposure\nGateway" as capex1 #Yellow
-participant "Federation\nManager" as fedman1 #Yellow
+box "\nOriginating SOP\n" #DAE8FC
+participant "Open Exposure\nGateway" as oeg1 #FAD9D5
+participant "Federation\nManager" as fm1 #FAD9D5
 end box
 
-box "Partner SOP" #STRATEGY
-participant "Federation\nManager" as fedman2 #Yellow
-participant "Edge Cloud \nTF" as tf #yellow
+box "\nPartner SOP\n" #FFE6CC
+participant "Federation\nManager" as fm2 #FAD9D5
+box "Open SDK" #FAD7AC
+participant "Edge Cloud \nTF" as tf2 #FAD9D5
+end box
 end box
 
-participant "Edge Cloud\nPlatform" as ecp2 #STRATEGY
+participant "Edge Cloud\nPlatform" as ecp2 #FFCC99
 
-note right app #Gold: CAMARA Edge Application Management API
-app -> capex1: Application Instantiation Request\n(Partner SOP Zone)
-note right capex1 #DarkTurquoise: GSMA Application Deployment Management API
-capex1 -> fedman1: Application Instantiation Request\n(Partner SOP Zone)
+note right app #white: CAMARA Edge App.\nManagement API
+app -> oeg1: App. Instantiation Req.\n(Partner SOP Zone)
+note right oeg1 #white: GSMA App. Deployment\nManagement API
+oeg1 -> fm1: App. Instantiation Req.\n(Partner SOP Zone)
+fm1 -> fm2: App. Instantiation Req.\n(Partner SOP Zone)
 
-fedman1 -> fedman2 : Application Instantiation Request\n(Partner SOP Zone)
-fedman2 -> fedman2 : Register Application\nInstantiation Request
+fm2 -> fm2: Register App.\nInstantiation Req.
 
-fedman2 -> tf : Application Instantiation Request
-tf -> ecp2: Application Instantiation Request
-ecp2 -> ecp2: Application\nInstantiated
-ecp2 -> tf: Application Instantiated Successfully
-tf --> fedman2: Application Instantiated Successfully
-fedman2 --> fedman1 : Application Instance Status Response\n(App Inst. Identifier)
+fm2 -> tf2: App. Instantiation Req.
+tf2 -> ecp2: App. Instantiation Req.
+ecp2 <-> ecp2: Instantiate App.
 
-fedman1 --> capex1: Application Instance Status Response \n(App Inst. Identifier)
-capex1 --> app: Application Instance Status Response\n(App Inst. Identifier)
+ecp2 --> tf2: ACK
+tf2 --> fm2:ACK
+
+fm2 --> fm1: ACK
+fm1 --> oeg1: ACK
+oeg1 --> app: App. Instance Status Response\n(App Inst. Identifier)
 
 @enduml

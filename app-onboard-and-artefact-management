@@ -15,12 +15,12 @@ skinparam sequence {
 
 participant "Application\nProvider" as app
 
-box "\nSOP (Operator A)\n" #DAE8FC
+box "\nOriginating SOP\n" #DAE8FC
 participant "Open Exposure\nGateway" as oeg1 #FAD9D5
 participant "Federation\nManager" as fm1 #FAD9D5
 end box
 
-box "\nSOP (Operator B)\n" #FFE6CC
+box "\nPartner SOP\n" #FFE6CC
 participant "Federation\nManager" as fm2 #FAD9D5
 box "Open SDK" #FAD7AC
 participant "Edge Cloud\nTF" as tf2 #FAD9D5
@@ -30,30 +30,30 @@ end box
 participant "Edge Cloud\nPlatform" as ecp2 #FFCC99
 
 note right app #white: CAMARA API\n(Edge App. Management)
-app -> oeg1: App. Onboarding Req.\n(Partner SOP Zone) (1)
-oeg1 <-> fm1: Check Federation Agreements (2)
+app -> oeg1: App. Onboarding Req.\n(Partner SOP Zone)
+oeg1 <-> fm1: Check Federation Agreements
 note right oeg1 #white: GSMA Artefact\nManagement API
 
-oeg1 -> fm1: Artefact Registration Req.\n(Partner SOP Zone) (3.a)
-fm1 -> fm2 : Artefact Registration Req.\n(Partner SOP Zone) (3.b)
-fm2 -> tf2 : Artefact Registration\nReq. (3.c)
-tf2 -> ecp2: Artefact Registration\nReq. (3.d)
-ecp2 <-> ecp2: Register Artefact\n(4)
+oeg1 -> fm1: Artefact Registration Req.\n(Partner SOP Zone)
+fm1 -> fm2 : Artefact Registration Req.\n(Partner SOP Zone)
+fm2 -> tf2 : Artefact Registration\nReq.
+tf2 -> ecp2: Artefact Registration\nReq.
+ecp2 <-> ecp2: Register Artefact\n
 
-ecp2 --> tf2: ACK (5.a)
-tf2 --> fm2: ACK (5.b)
-fm2 --> fm1: ACK (5.c)
-fm1 --> oeg1: ACK (5.d)
+ecp2 --> tf2: ACK
+tf2 --> fm2: ACK
+fm2 --> fm1: ACK 
+fm1 --> oeg1: ACK
 
 note right oeg1 #white: GSMA App. Onboarding\nManagement API
-oeg1 -> fm1: App. Onboarding Req.\n(Partner SOP Zone) (6.a)
-fm1 -> fm2: App. Onboarding\nReq. (6.b)
-fm2 -> tf2: App. Onboarding\nReq. (6.c)
-tf2 -> ecp2: App. Onboarding\nReq. (6.d)
-ecp2 <-> ecp2: Onboard App.\n(7)
-ecp2 --> tf2: ACK (8.a)
-tf2 --> fm2: ACK (8.b)
-fm2 --> fm1: ACK (8.c)
-fm1 --> oeg1: ACK (8.d)
-oeg1 --> app: App. Onboarding Response (9)
+oeg1 -> fm1: App. Onboarding Req.\n(Partner SOP Zone)
+fm1 -> fm2: App. Onboarding\nReq.
+fm2 -> tf2: App. Onboarding\nReq.
+tf2 -> ecp2: App. Onboarding\nReq.
+ecp2 <-> ecp2: Onboard App.\n
+ecp2 --> tf2: ACK
+tf2 --> fm2: ACK
+fm2 --> fm1: ACK
+fm1 --> oeg1: ACK
+oeg1 --> app: App. Onboarding Response
 @enduml

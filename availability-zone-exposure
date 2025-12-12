@@ -1,28 +1,39 @@
 @startuml
 !pragma teoz true
 
+'skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+
+skinparam sequence {
+    'ParticipantFontSize 20
+    'ParticipantFontStyle bold
+    'MessageFontSize 12
+    MessageFontStyle bold
+    ArrowThickness 2
+    LifeLineBorderThickness 2
+}
+
 participant "Application\nProvider" as app 
 
-box "Originating SOP" #LightBlue
-participant "Open Exposure\nGateway" as capex1 #Yellow
-participant "Service Resource\nManager" as pltmng1 #yellow
-participant "Federation\nManager" as fedman1 #Yellow
+box "\nOriginating SOP\n" #DAE8FC
+participant "Open Exposure\nGateway" as capex1 #FAD9D5
+participant "Service Resource\nManager" as pltmng1 #FAD9D5
+participant "Federation\nManager" as fedman1 #FAD9D5
 end box
 
-note right app #Gold: CAMARA Edge Cloud API
-app -> capex1: Retrieve Edge Cloud Zones
-
+note right app #white: CAMARA Edge Cloud API
+app -> capex1: Retrieve Edge\nCloud Zones
+note right capex1 #white: GSMA Availability Zone\nInfo Synchronization
 capex1 -> pltmng1: Retrieve Local Zones
 pltmng1 -> pltmng1: Retrieve Local Zones
 pltmng1 --> capex1: Local Zones Response
 note over capex1: Local zones received\n(waiting for federated zones)
-note right capex1 #DarkTurquoise: GSMA Availability Zone\nInfo Synchronization
-capex1 --> fedman1: Retrieve Federated Zone 
+capex1 -> fedman1: Retrieve Federated Zones
 fedman1 -> fedman1: Retrieve Federated Zone info
 fedman1 --> capex1: Federated Zones Response
-note over capex1: Federated zones received\n(processing to full response)
-capex1 --> app: Edge Cloud Zones Response 
-app -> app: Edge Cloud Zone Selection \n(zone from partner SOP)
+note over capex1: Federated zones received\n(processing the full response)
+capex1 --> app: Edge Cloud Zones Response
+app -> app: Edge Cloud Zone Selection\n(zone from Partner SOP)
 
 @enduml
 

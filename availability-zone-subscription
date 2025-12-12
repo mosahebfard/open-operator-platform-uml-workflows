@@ -1,13 +1,25 @@
 @startuml
 !pragma teoz true
 
+'skinparam ParticipantPadding 20
+skinparam BoxPadding 10
 
-box "Originating SOP" #LightBlue
-participant "Federation\nManager" as fedman1 #Yellow
+skinparam sequence {
+    'ParticipantFontSize 20
+    'ParticipantFontStyle bold
+    'MessageFontSize 12
+    MessageFontStyle bold
+    ArrowThickness 2
+    LifeLineBorderThickness 2
+}
+
+
+box "\nOriginating SOP\n" #DAE8FC
+participant "Federation\nManager" as fedman1 #FAD9D5
 end box
 
-box "Partner SOP" #STRATEGY
-participant "Federation\nManager" as fedman2 #Yellow
+box "\nPartner SOP\n" #FFE6CC
+participant "Federation\nManager" as fedman2 #FAD9D5
 end box
 
 fedman1 -> fedman2: Zone Subscription Request\n(accepted zones)
