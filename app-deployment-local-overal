@@ -1,0 +1,51 @@
+@startuml
+!pragma teoz true
+
+'skinparam ParticipantPadding 10
+skinparam BoxPadding 10
+
+
+skinparam sequence {
+    'ParticipantFontSize 20
+    'ParticipantFontStyle bold
+    'MessageFontSize 12
+    MessageFontStyle bold
+    ArrowThickness 2
+    LifeLineBorderThickness 2
+}
+
+
+participant "Application\nProvider" as app
+
+box "\nSOP (Operator A)\n" #DAE8FC
+participant "API Exposure\nManager" as aem #FAD9D5
+participant "Open Exposure\nGateway" as oeg #FAD9D5
+participant "Service Resource\nManager" as srm #FAD9D5
+box "Open SDK" #B3CBE5
+participant "Edge Cloud\nTF" as tf #FAD9D5
+end box
+end box
+
+participant "Edge Cloud\nPlatform" as ecp #B1DDF0
+participant "Managed\nEdge Site" as mes #B1DDF0
+
+app -> aem: Discover Published APIs Req.\n(1.a)
+aem -> app: Published APIs (1.b)
+app -> aem: Authorisation Req.\nto Access the Selected API (2.a)
+aem -> app: Access Token (2.b)
+|||
+note right app #white: CAMARA API\n(Edge Application Management)
+app -> oeg: App. Instantiation Req. (Local SOP Zone)\n(3.a)
+note right oeg #white: GSMA API\n(Application Deployment Management)
+oeg -> srm: App. Instantiation Req.\n(Partner SOP Zone)\n(3.b)
+
+srm -> tf : App. Instantiation Req.\n(3.c)
+tf -> ecp: App. Instantiation Req.\n(3.d)
+ecp -> mes: Instantiate App.\n(3.e)
+mes -> ecp: ACK (4.a)
+ecp -> tf: ACK (4.b)
+tf --> srm: ACK (App. Inst. Identifier) (4.c)
+srm --> oeg: ACK (App. Inst. Identifier) (4.d)
+oeg --> app: ACK (App. Inst. Identifier) (4.e)
+
+@enduml
