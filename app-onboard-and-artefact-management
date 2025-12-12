@@ -1,36 +1,59 @@
 @startuml
 !pragma teoz true
 
-participant "Application\nProvider" as app 
+'skinparam ParticipantPadding 10
+skinparam BoxPadding 10
 
-box "Originating SOP" #LightBlue
-participant "Open Exposure\nGateway" as capex1 #yellow
-participant "Federation\nManager" as fedman1 #Yellow
+skinparam sequence {
+    'ParticipantFontSize 20
+    'ParticipantFontStyle bold
+    'MessageFontSize 12
+    MessageFontStyle bold
+    ArrowThickness 2
+    LifeLineBorderThickness 2
+}
+
+participant "Application\nProvider" as app
+
+box "\nSOP (Operator A)\n" #DAE8FC
+participant "Open Exposure\nGateway" as oeg1 #FAD9D5
+participant "Federation\nManager" as fm1 #FAD9D5
 end box
 
-box "Partner SOP" #STRATEGY
-participant "Federation\nManager" as fedman2 #Yellow
-participant "Edge Cloud\nTF" as tf #yellow
+box "\nSOP (Operator B)\n" #FFE6CC
+participant "Federation\nManager" as fm2 #FAD9D5
+box "Open SDK" #FAD7AC
+participant "Edge Cloud\nTF" as tf2 #FAD9D5
 end box
-participant "Edge Cloud\nPlatform" as ecp #STRATEGY
+end box
 
-note right app #Gold: CAMARA Edge Application\nManagement API
-app -> capex1: Application Onboarding Request\n(Partner SOP Zone)
+participant "Edge Cloud\nPlatform" as ecp2 #FFCC99
 
-capex1 <-> fedman1: Check Federation Agreements
-note right capex1 #DarkTurquoise: GSMA Artefact Management API
-capex1 -> fedman1: Artefact Registration Request\n(Partner SOP Zone)
-fedman1 -> fedman2: Artefact Registration Request
-fedman2 -> tf: Artefact Registration Request
-tf -> ecp: Artefact Registration Request
-ecp <-> ecp: Register Artefact 
+note right app #white: CAMARA API\n(Edge App. Management)
+app -> oeg1: App. Onboarding Req.\n(Partner SOP Zone) (1)
+oeg1 <-> fm1: Check Federation Agreements (2)
+note right oeg1 #white: GSMA Artefact\nManagement API
 
-note right capex1 #DarkTurquoise: GSMA Application Onboarding\nManagement API
-capex1 -> fedman1: Application Onboarding Request\n(Partner SOP Zone)
+oeg1 -> fm1: Artefact Registration Req.\n(Partner SOP Zone) (3.a)
+fm1 -> fm2 : Artefact Registration Req.\n(Partner SOP Zone) (3.b)
+fm2 -> tf2 : Artefact Registration\nReq. (3.c)
+tf2 -> ecp2: Artefact Registration\nReq. (3.d)
+ecp2 <-> ecp2: Register Artefact\n(4)
 
-fedman1 -> fedman2: Application Onboarding Request 
-fedman2 -> tf: Application Onboarding Request
-tf -> ecp: Application Onboarding Request
-ecp <-> ecp: Onboard Application
+ecp2 --> tf2: ACK (5.a)
+tf2 --> fm2: ACK (5.b)
+fm2 --> fm1: ACK (5.c)
+fm1 --> oeg1: ACK (5.d)
 
+note right oeg1 #white: GSMA App. Onboarding\nManagement API
+oeg1 -> fm1: App. Onboarding Req.\n(Partner SOP Zone) (6.a)
+fm1 -> fm2: App. Onboarding\nReq. (6.b)
+fm2 -> tf2: App. Onboarding\nReq. (6.c)
+tf2 -> ecp2: App. Onboarding\nReq. (6.d)
+ecp2 <-> ecp2: Onboard App.\n(7)
+ecp2 --> tf2: ACK (8.a)
+tf2 --> fm2: ACK (8.b)
+fm2 --> fm1: ACK (8.c)
+fm1 --> oeg1: ACK (8.d)
+oeg1 --> app: App. Onboarding Response (9)
 @enduml
