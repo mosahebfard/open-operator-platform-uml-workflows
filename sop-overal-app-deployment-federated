@@ -1,0 +1,66 @@
+@startuml
+!pragma teoz true
+
+'skinparam ParticipantPadding 10
+skinparam BoxPadding 10
+
+
+skinparam sequence {
+    'ParticipantFontSize 20
+    'ParticipantFontStyle bold
+    'MessageFontSize 12
+    MessageFontStyle bold
+    ArrowThickness 2
+    LifeLineBorderThickness 2
+}
+
+participant "Application\nProvider" as app
+
+box "\nSOP (Operator A)\n" #DAE8FC
+participant "API Exposure\nManager" as aem #FAD9D5
+participant "Open Exposure\nGateway" as oeg #FAD9D5
+participant "Federation\nManager" as fm1 #FAD9D5
+end box
+
+box "\nSOP (Operator B)\n" #FFE6CC
+participant "Federation\nManager" as fm2 #FAD9D5
+box "Open SDK" #FAD7AC
+participant "Edge Cloud\nTF" as tf #FAD9D5
+end box
+'participant "Artefact\nManager" as am #FAD9D5
+end box
+
+
+'participant "Artefact\nRegistry" as ar2 #FFCC99
+participant "Edge Cloud\nPlatform" as ecp2 #FFCC99
+participant "Managed\nEdge Site" as mes2 #FFCC99
+
+app -> aem: Discover Published APIs Req.\n(1.a)
+aem -> app: Published APIs (1.b)
+app -> aem: Authorisation Req.\nto Access the Selected API (2.a)
+aem -> app: Access Token (2.b)
+'|||
+note right app #white: CAMARA API\n(Edge Application Management)
+app -> oeg: App. Instantiation Req. (Partner SOP Zone)\n(3.a)
+note right oeg #white: GSMA API\n(Application Deployment Management)
+oeg -> fm1: App. Instantiation Req.\n(Partner SOP Zone)\n(3.b)
+
+fm1 -> fm2 : App. Instantiation Req.\n(Partner SOP Zone)\n(3.c)
+
+fm2 -> fm2 : Register App.\nInstantiation Req.\n(4.a)
+fm2 -> tf : App. Instantiation Req.\n(5.a)
+tf -> ecp2: App. Instantiation Req.\n(5.b)
+ecp2 -> mes2: Instantiate App.\n(5.c)
+mes2 -> ecp2: ACK (6.a)
+ecp2 -> tf: ACK (6.b)
+'ecp2 -> tf: App. Instantiated\nSuccessfully (8.a)
+tf --> fm2: ACK (6.c)
+'tf --> fm2: App. Instantiated\nSuccessfully (9.a)
+
+fm2 --> fm1 : ACK (App. Inst. Identifier)\n(7.a)
+'fm2 --> fm1 : App. Instance\nStatus Response\n(App.Inst. Identifier) (8.a)
+
+fm1 --> oeg: ACK (App. Inst. Identifier)\n(7.b)
+oeg --> app: ACK (App. Inst. Identifier) (7.c)
+
+@enduml
