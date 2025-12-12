@@ -1,0 +1,28 @@
+@startuml
+!pragma teoz true
+
+participant "Application\nProvider" as app 
+
+box "Originating SOP" #LightBlue
+participant "Open Exposure\nGateway" as capex1 #Yellow
+participant "Service Resource\nManager" as pltmng1 #yellow
+participant "Federation\nManager" as fedman1 #Yellow
+end box
+
+note right app #Gold: CAMARA Edge Cloud API
+app -> capex1: Retrieve Edge Cloud Zones
+
+capex1 -> pltmng1: Retrieve Local Zones
+pltmng1 -> pltmng1: Retrieve Local Zones
+pltmng1 --> capex1: Local Zones Response
+note over capex1: Local zones received\n(waiting for federated zones)
+note right capex1 #DarkTurquoise: GSMA Availability Zone\nInfo Synchronization
+capex1 --> fedman1: Retrieve Federated Zone 
+fedman1 -> fedman1: Retrieve Federated Zone info
+fedman1 --> capex1: Federated Zones Response
+note over capex1: Federated zones received\n(processing to full response)
+capex1 --> app: Edge Cloud Zones Response 
+app -> app: Edge Cloud Zone Selection \n(zone from partner SOP)
+
+@enduml
+
