@@ -1,0 +1,46 @@
+@startuml
+!pragma teoz true
+
+'skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+
+skinparam sequence {
+    'ParticipantFontSize 20
+    'ParticipantFontStyle bold
+    'MessageFontSize 12
+    MessageFontStyle bold
+    ArrowThickness 2
+    LifeLineBorderThickness 2
+}
+
+participant "Application\nProvider" as app
+
+box "\nOriginating SOP\n" #DAE8FC
+participant "Open Exposure\nGateway" as oeg1 #FAD9D5
+participant "Federation\nManager" as fm1 #FAD9D5
+end box
+
+box "\nPartner SOP\n" #FFE6CC
+participant "Federation\nManager" as fm2 #FAD9D5
+box "Open SDK" #FAD7AC
+participant "Edge Cloud \nTF" as tf #FAD9D5
+end box
+end box
+
+participant "Edge Cloud\nPlatform" as ecp2 #FFCC99
+
+note right app #white: CAMARA Edge App.\nManagement API
+app -> oeg1: App. Instance Status Req. \n(App. Instance Identifier)
+note right oeg1 #white: GSMA App.\nDeployment Management API
+oeg1 -> fm1: App. Instance Status Req. \n(App. Instance Identifier)
+fm1 -> fm2: App. Instance Status Req. \n(App. Instance Identifier)
+
+fm2 -> tf: App. Instance Status Req. \n(App. Instance Identifier)
+tf <-> ecp2: Retrieve App. Instance\nStatus (IP, FQDN)
+tf --> fm2: ACK
+fm2 --> fm1: ACK
+
+fm1 --> oeg1: ACK
+oeg1 --> app: App. Instance Status\nResponse (IP, FQDN)
+
+@enduml
