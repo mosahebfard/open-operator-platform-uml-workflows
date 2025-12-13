@@ -1,4 +1,4 @@
-@startuml
+@startuml app-onboard-and-artefact-management
 !pragma teoz true
 
 'skinparam ParticipantPadding 10

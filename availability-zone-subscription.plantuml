@@ -1,4 +1,4 @@
-@startuml
+@startuml avalability-zone-subscription
 !pragma teoz true
 
 'skinparam ParticipantPadding 20

@@ -1,4 +1,4 @@
-@startuml
+@startuml availability-zone-exposure
 !pragma teoz true
 
 'skinparam ParticipantPadding 20
